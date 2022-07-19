@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <script src="https://code.jquery.com/jquery-migrate-3.4.0.js" integrity="sha256-0Nkb10Hnhm4EJZ0QDpvInc3bRp77wQIbIQmWYH3Y7Vw=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script>
+        function signUp(){
+            window.open("./SignUp","","_blank")
+        }
+    </script>
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing: border-box;
+        font-family: "Noto Sans KR", sans-serif;
+    }
+    .rp{
+        width:100%;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgb(189, 239, 249);
+    }
+    .login{
+        width: 30%;
+        height: 600px;
+        background: white;
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    h2{
+        color:skyblue;
+        font-size: 2em;
+    }
+    .loginId {
+        margin-top:20px;
+        width:80%;
+    }
+    .loginId input{
+        width: 100%;
+        height: 50px;
+        border-radius: 30px;
+        margin-top: 10px;
+        padding: 0px 20px;
+        border: 1px solid lightgray;
+        outline: none;
+    }
+    .login_pwd{
+        margin-top:20px;
+        width:80%;
+    }
+    .login_pwd input{
+        width: 100%;
+        height: 50px;
+        border-radius: 30px;
+        margin-top: 10px;
+        padding: 0px 20px;
+        border: 1px solid lightgray;
+        outline: none;
+    }
+    
+    .submi{
+        margin-top: 50px;
+        width:80%;
+    }
+    .submi input{
+        width: 100%;
+        height: 50px;
+        border: 0;
+        outline: none;
+        border-radius: 40px;
+        background: linear-gradient(to left, rgb(178, 141, 242), rgb(148, 230, 241));
+        color: white;
+        font-size: 1.2em;
+        letter-spacing: 2px;
+    }
+    .signup{
+        margin-top: 20px;
+        width:80%;
+    }
+    .signup button{
+        width: 100%;
+        height: 50px;
+        border: 0;
+        outline: none;
+        border-radius: 40px;
+        background: linear-gradient(to left, rgb(178, 141, 242), rgb(148, 230, 241));
+        color: white;
+        font-size: 1.2em;
+        letter-spacing: 2px;
+    }
+</style>
+</head>
+<body onload="document.f1.user_id.focus();">
+    <div class="rp">
+        <div class="login">
+            <form action="" method="post" name="f1" >
+                <h2>로그인</h2>
+                <div class="loginId">
+                    <h4>ID</h4>
+                    <input type="text" name="user_id" id="user_id" required/>
+                </div>
+                <div class="login_pwd">
+                    <h4>PWD</h4>
+                    <input type="text" name="user_pwd" id="user_pwd" required/>
+                </div>
+                <div class="submi">
+                    <input id="subm" type="submit" value="확인">
+                </div>
+                <div class="signup">
+                    <button onclick="signUp()">회원가입</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

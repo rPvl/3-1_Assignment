@@ -1,0 +1,60 @@
+[project.js]
+app.get('/',(request,response)=>{})에 있는 코드는 'project.html' 파일을 전송한다. 로그인 페이지이다. 
+
+app.post('/',(request,response)=>{})에 있는 코드는 로그인을 확인하는 코드이다.
+'user_information.txt'파일을 읽어서 아이디를 확인한다.
+아이디가 틀리면 해당 아이디가 없다는 알림 창을 띄운다.
+아이디가 맞으면 비밀번호를 확인한다.
+만약 비밀번호를 3번 틀리면 1분간 로그인을 못 하게 막는다.
+아이디와 비밀번호가 다 맞으면 수강신청 화면으로 넘어간다.
+
+app.get('/SignUp',(request, response)=>{})에 있는 코드는 'SignUp.html'파일을 전송한다. 회원가입 페이지이다.
+
+app.post('/SignUp',(request, response)=>{})에 있는 코드는 회원가입을 확인하는 코드이다.
+'user_information.txt'파일을 읽어서 전송된 아이디와 똑같은 아이디가 있는지 확인하고 없으면 회원가입이 되도록 한다.
+만약에 입력된 아이디와 똑같은 아이디가 있다면 이미 사용 중이라는 알림 창을 띄운다.
+
+app.get('/Enrolment',(request, response)=>{})에 있는 코드는 수강신청 페이지이다.
+'enrolment.txt'파일을 읽어서 로그인한 아이디가 수강 신청한 과목들을 테이블로 나타낸다.
+'subject.txt'파일을 읽어서 전체 교과목 테이블을 나타낸다.
+비동기적으로 'Enrolment.html'파일을 전송한다
+
+app.post('/Enrolment/insert',(request, response)=>{})에 있는 코드는 입력된 데이터를 'enrolment.txt'에 삽입하는 코드이다.
+'enrolment.txt' 파일을 읽어서 해당 아이디가 신청한 교과목을 살펴본다.
+전체 교과목에 없는 데이터를 입력했을 경우 잘못 입력했다는 알림 창을 띄운다.
+이미 수강신청되어 있다면 이미 수강신청된 과목이라는 알림 창을 띄운다.
+수강 신청되어있지 않다면 수강신청되었다는 알림 창을 띄우고 'enrolment.txt'파일에 로그인된 아이디의 수강과목에 입력된 데이터를 추가로 저장한다.
+
+app.post('/Enrolment/delet',(request,response)=>{}) 에 있는 코드는 입력된 데이터를 'enrolment.txt'에서 삭제하는 코드이다.
+전체 교과목에 없는 데이터를 입력했을 경우 잘못 입력했다는 알림 창을 띄운다.
+삭제되었으면 삭제되었다는 알림 창을 띄운다. 그리고 'enrolment.txt'파일에 로그인된 아이디의 수강과목에서 입력된 데이터를 삭제한다.
+신청하지 않은 교과목을 입력했을 경우 신청하지 않은 교과목이라는 알림 창을 띄운다.
+
+app.listen(52273,()=>{console.log('Server Start')}); 는 서버구동 코드이다.
+
+[project.html]
+로그인 페이지이다.
+아이디와 비밀번호를 입력하고 "확인" 버튼을 누르면 서버에 전송된다.
+"회원가입" 버튼을 누르면 회원가입 창이 뜬다.
+
+[SignUp.html]
+회원가입 페이지이다.
+아이디와 비밀번호를 입력하고 "회원가입" 버튼을 누르면 아이디와 비밀번호가 조건에 맞는지 확인한다.
+조건에 맞으면 서버에 전송하고 조건과 다르다면 서버에 전송하지 않는다.
+cancel_chk 함수는 열린 창(회원가입 창)을 닫는다. 
+
+[Enrolment.html]
+수강신청 페이지이다.
+입력된 데이터를 "추가" 버튼이나 "삭제" 버튼을 통해 서버에 전송한다.
+
+
+
+
+
+[참고 사이트]
+https://hianna.tistory.com/390
+https://developer.mozilla.org/ko/docs/Learn/JavaScript/Objects/Basics
+https://kutar37.tistory.com/entry/%ED%95%9C%EA%B0%9C%EC%9D%98-Form%EC%97%90%EC%84%9C-%EC%97%AC%EB%9F%AC%EA%B0%9C-Submit-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
+https://velog.io/@p-acid/Review-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%ED%99%94%EB%A9%B4-%EA%B5%AC%ED%98%84
+https://homnay.tistory.com/19
+https://inpa.tistory.com/entry/CSS-%F0%9F%93%9A-%ED%85%8C%EC%9D%B4%EB%B8%94%ED%91%9C-%EA%BE%B8%EB%AF%B8%EA%B8%B0
