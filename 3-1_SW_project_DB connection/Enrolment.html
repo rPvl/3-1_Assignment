@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수강신청</title>
+    <style>
+        body {
+            background-color: rgb(189, 239, 249);
+        }
+        table{
+            border: 2px solid;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        th, td{
+            border: 1px solid;
+            padding: 10px 5px;
+        }
+        th{
+            background-color: mediumturquoise;
+        }
+        td{
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div name="f1">
+        <form method="post">
+            <input name="intext" id="intext" autofocus/>
+            <input type="submit" name="insert" id="insert" formaction="/Enrolment/insert" value="추가">
+            <input type="submit" name="delet" id = "delet" onclick="javascript:form.action='/Enrolment/delet';" value="삭제">
+        </form>
+    </div>
+    
+</body>
+</html>

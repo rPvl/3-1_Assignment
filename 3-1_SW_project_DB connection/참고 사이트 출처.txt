@@ -1,0 +1,8 @@
+[참고 사이트 출처]
+https://hianna.tistory.com/390
+https://developer.mozilla.org/ko/docs/Learn/JavaScript/Objects/Basics
+https://kutar37.tistory.com/entry/%ED%95%9C%EA%B0%9C%EC%9D%98-Form%EC%97%90%EC%84%9C-%EC%97%AC%EB%9F%AC%EA%B0%9C-Submit-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
+https://velog.io/@p-acid/Review-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%ED%99%94%EB%A9%B4-%EA%B5%AC%ED%98%84
+https://homnay.tistory.com/19
+https://inpa.tistory.com/entry/CSS-%F0%9F%93%9A-%ED%85%8C%EC%9D%B4%EB%B8%94%ED%91%9C-%EA%BE%B8%EB%AF%B8%EA%B8%B0
+
