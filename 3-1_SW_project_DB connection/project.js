@@ -149,31 +149,32 @@ app.post('/SignUp', (request, response) => {//회원가입 확인
     let check = 0;
 
     let objArray = []
-    objArray = fs.readFileSync("./user_information.txt").toString().split('\n')
-    for (let i in objArray) {
-        if (i == objArray.length - 1) break;
-        objArray[i] = JSON.parse(objArray[i].toString())//문자열을 객체로 파싱
 
-    }
-    for (let i in objArray) if (objArray[i].user_id == arr[0].user_id) { check = 1; break; }
-
-    if (check == 0) {
-
-        fs.appendFileSync("./user_information.txt", JSON.stringify(arr[0]) + "\n")//객체를 문자로 
-
-        let idData = { user_id: arr[0].user_id, user_enrol: [] }//수강등록을 위한 객체
-        fs.appendFileSync("./enrolment.txt", JSON.stringify(idData) + "\n")
+    let sql = 'SELECT * FROM Student';
+    conn.query(sql, function (err, rows, fields) {
+        if (err) console.log('query is not executed. select fail...\n' + err);
+        else {
+            objArray = JSON.parse(JSON.stringify(rows))//문자열로바꾸고 객체로 파싱.
 
 
-        let tex = '<body>' + '<meta charset="UTF-8">' + '<meta http-equiv="X-UA-Compatible" content="IE=edge">' + '<script>' + 'alert("회원가입되었습니다."); window.close();' + '</script>' + '</body>'
-        response.end(tex)
-    }
-    else {
-        let tex = '<body>' + '<meta charset="UTF-8">' + '<meta http-equiv="X-UA-Compatible" content="IE=edge">' + '<script>' + 'alert("이미 사용 중인 아이디입니다. 다른 아이디를 입력하십시오."); location.replace("/SignUp");' + '</script>' + '</body>'
-        response.end(tex)
+            for (let i in objArray) if (objArray[i].user_id == arr[0].user_id) { check = 1; break; }
 
-    }
+            if (check == 0) {
 
+                let sql = "INSERT INTO Student VALUES('" + arr[0].user_id + "', '" + arr[0].user_pwd + "');"//작은 따옴표도 해줘야 SQL문법에러 안생김
+                conn.query(sql);//서버에 회원정보 삽입
+
+
+                let tex = '<body>' + '<meta charset="UTF-8">' + '<meta http-equiv="X-UA-Compatible" content="IE=edge">' + '<script>' + 'alert("회원가입되었습니다."); window.close();' + '</script>' + '</body>'
+                response.end(tex)
+            }
+            else {
+                let tex = '<body>' + '<meta charset="UTF-8">' + '<meta http-equiv="X-UA-Compatible" content="IE=edge">' + '<script>' + 'alert("이미 사용 중인 아이디입니다. 다른 아이디를 입력하십시오."); location.replace("/SignUp");' + '</script>' + '</body>'
+                response.end(tex)
+
+            }
+        }
+    })
 })
 
 app.get('/Enrolment', (request, response) => {
