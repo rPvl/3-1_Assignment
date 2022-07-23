@@ -178,75 +178,76 @@ app.post('/SignUp', (request, response) => {//회원가입 확인
 })
 
 app.get('/Enrolment', (request, response) => {
-    let objArray = []
-    let objArray2 = []
-    let enrolArray = []
+    let objArray = [] //로그인 아이디가 신청한 과목
+    let objArray2 = [] //전체 과목
     let sum = 0
-    objArray = fs.readFileSync('./enrolment.txt').toString().split('\n') //id별로 신청한 과목
-    objArray2 = fs.readFileSync('./subject.txt').toString().split('\n') //전체 과목
 
-    let output1 = ""
-    output1 += "<h4>\<수강 신청한 교과목\></h4>"
-    output1 += '<table> <tr><th>교과목명<th>담당교수<th>학점'
+    let sql = "SELECT S.name, professor, credit FROM Subject S, Enrol E WHERE user_id='" + login_id + "' AND E.name=S.name;"
+    conn.query(sql, function (err, rows, fields) {
+        if (err) console.log('query is not executed. select fail...\n' + err);
+        else {
+            objArray = JSON.parse(JSON.stringify(rows))//문자열로바꾸고 객체로 파싱.
 
-    //로그인된 아이디랑 같은 아이디인 걸 objArray에서 찾아서 해당 교과목에 맞는 교수와 학점을 테이블로 만든다
-    for (let i in objArray) {
-        if (i == objArray.length - 1) break;
-        objArray[i] = JSON.parse(objArray[i].toString())//문자열을 객체로 파싱
+            let sql2 = "SELECT * FROM Subject"
+            conn.query(sql2, function (err, rows, fields) {
+                if (err) console.log('query is not executed. select fail...\n' + err);
+                else {
+                    objArray2 = JSON.parse(JSON.stringify(rows))//문자열로바꾸고 객체로 파싱.
 
-    }
-    for (let i in objArray) {
-        if (objArray[i].user_id == login_id) {
-            enrolArray = objArray[i].user_enrol
-            break;
-        }
-    }
 
-    for (let i of enrolArray) {
-        for (let j of objArray2) {
-            if (j != "") {
-                if (JSON.parse(j).name == i) {
-                    output1 += "<tr><td>"
-                    output1 += JSON.parse(j).name
-                    output1 += "<td>"
-                    output1 += JSON.parse(j).p
-                    output1 += "<td>"
-                    output1 += JSON.parse(j).credit
-                    output1 += "</tr>"
-                    sum += JSON.parse(j).credit
+                    let output1 = ""
+                    output1 += "<h4>\<수강 신청한 교과목\></h4>"
+                    output1 += '<table> <tr><th>교과목명<th>담당교수<th>학점'
+
+                    for (let i in objArray) {
+                        output1 += "<tr><td>"
+                        output1 += objArray[i].name
+                        output1 += "<td>"
+                        output1 += objArray[i].professor
+                        output1 += "<td>"
+                        output1 += objArray[i].credit
+                        output1 += "</tr>"
+                        sum += objArray[i].credit
+                    }
+
+
+
+                    output1 += "</table><p><h5> \<총 수강 신청한 학점 총점 : "
+                    output1 += sum
+                    output1 += "\></h5></p>"
+
+
+                    let output2 = "";
+                    output2 += "<h4> \<전체 교과목\> </h4>"
+                    output2 += `<table> <tr><th>교과목명<th>담당교수<th>학점 `
+                    for (let i in objArray2) {
+                        if (i != "") {
+                            output2 += "<tr><td>"
+                            output2 += objArray2[i].name
+                            output2 += "<td>"
+                            output2 += objArray2[i].p
+                            output2 += "<td>"
+                            output2 += objArray2[i].credit
+                            output2 += "</tr>"
+                        }
+                    }
+                    output2 += "</table>"
+
+                    fs.readFile("./Enrolment.html", (error, data) => {
+                        response.writeHead(200, { 'Content-Type': "text/html" })
+                        response.write(data)//html
+                        response.write(output1)//수강신청한 과목 테이블 보여주기
+                        response.write(output2)//전체 과목 테이블
+                        response.end()
+                    })
                 }
-            }
+            })
         }
-    }
-    output1 += "</table><p><h5> \<총 수강 신청한 학점 총점 : "
-    output1 += sum
-    output1 += "\></h5></p>"
-
-
-    let output2 = "";
-    output2 += "<h4> \<전체 교과목\> </h4>"
-    output2 += `<table> <tr><th>교과목명<th>담당교수<th>학점 `
-    for (let i of objArray2) {
-        if (i != "") {
-            output2 += "<tr><td>"
-            output2 += JSON.parse(i).name
-            output2 += "<td>"
-            output2 += JSON.parse(i).p
-            output2 += "<td>"
-            output2 += JSON.parse(i).credit
-            output2 += "</tr>"
-        }
-    }
-    output2 += "</table>"
-
-    fs.readFile("./Enrolment.html", (error, data) => {
-        response.writeHead(200, { 'Content-Type': "text/html" })
-        response.write(data)
-        response.write(output1)//수강신청한 과목 테이블 보여주기
-        response.write(output2)//전체 과목 테이블
-        response.end()
     })
 })
+
+
+
 app.post('/Enrolment/insert', (request, response) => {//enrolment.txt에 전송된 데이터 삽입
     //enrolment.txt파일 읽어서 해당 아이디가 신청한 교과목 살펴보기
 
