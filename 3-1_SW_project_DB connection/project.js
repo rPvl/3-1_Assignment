@@ -11,24 +11,6 @@ db_config.connect(conn) //DB 연결
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 
-
-
-
-//SQL문에 따른 결과가 배열로 나옴. 배열안에 원소는 객체임.
-//SQL test
-// var sql = 'SELECT * FROM Subject';    
-// conn.query(sql, function (err, rows, fields) {
-//     //console.log(rows);
-//     if(err) console.log('query is not executed. select fail...\n' + err);
-//     else{ 
-//         //res.render('list', {list : rows})
-//         console.log(rows); //rows is array
-//     }
-// })
-
-
-
-
 let login_chk = []
 let login_id
 
@@ -45,14 +27,13 @@ app.post('/', (request, response) => {//로그인 확인
 
     let objArray = []
 
-
+    //SQL문에 따른 결과가 배열로 나옴. 배열안에 원소는 객체임.
     let sql = 'SELECT * FROM Student';
     conn.query(sql, function (err, rows, fields) {
         if (err) console.log('query is not executed. select fail...\n' + err);
         else {
             objArray = JSON.parse(JSON.stringify(rows))//문자열로바꾸고 객체로 파싱.
             //console.log(objArray)
-
 
             let id_exi = 0;
             let lock = 0
@@ -249,14 +230,10 @@ app.get('/Enrolment', (request, response) => {
 
 
 app.post('/Enrolment/insert', (request, response) => {//DB에 전송된 데이터 삽입(insert)
-    //enrolment.txt파일 읽어서 해당 아이디가 신청한 교과목 살펴보기
-
     let enrolData = request.body.intext;//post로 전송 받은 교과목명
-    let objArray = []//로그인 아이디가 등록한 과목 정보
-    let objArray2 = []//전체 과목 정보
     let enrolArray = []//로그인 아이디가 등록한 과목명
     let enrolArray2 = []//전체 과목명
-    let num, chk = 0;
+    let chk = 0;
 
     let sql = "SELECT name FROM Enrol WHERE user_id='" + login_id + "';"
     conn.query(sql, function (err, rows, fields) {
@@ -275,11 +252,9 @@ app.post('/Enrolment/insert', (request, response) => {//DB에 전송된 데이�
                         //console.log("i.name : "+enrolArray2[i].name)
                         if (enrolArray2[i].name == enrolData) chk = 1
                     }
-                    //console.log(chk)
                     if (chk == 0) {
                         response.write('<body><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><script>alert("교과목명이 잘못 입력되었습니다. 다시 입력하십시오.");location.replace("/Enrolment");</script>')
                     }
-
 
                     else {
                         chk = 0
@@ -302,61 +277,50 @@ app.post('/Enrolment/insert', (request, response) => {//DB에 전송된 데이�
     })
 })
 app.post('/Enrolment/delet', (request, response) => {//enrolment.txt에 데이터 삭제(delete)
-    let enrolData = request.body.intext;//교과목명
-    let objArray = []
-    let objArray2 = []
-    let enrolArray = []
-    let enrolArray2 = []
-    let num, chk = 0;
-    objArray = fs.readFileSync("./enrolment.txt").toString().split('\n')
-    objArray2 = fs.readFileSync('./subject.txt').toString().split('\n') //전체 과목
-    for (let i in objArray) {
-        if (i == objArray.length - 1) break; //마지막은 ''으로 되어있음.
-        objArray[i] = JSON.parse(objArray[i].toString())//문자열을 객체로 파싱
-    }
-    for (let i in objArray2) {
-        if (i == objArray2.length - 1) break;
-        objArray2[i] = JSON.parse(objArray2[i].toString())
-        enrolArray2.push(objArray2[i].name)
-    }
-    //console.log(enrolArray2)
+    let enrolData = request.body.intext; //post로 전송 받은 교과목명
+    let enrolArray = []//등록한 과목명
+    let enrolArray2 = []//전체 과목명
+    let chk = 0;
 
-    for (let i in objArray) {
-        if (objArray[i].user_id == login_id) {
-            enrolArray = objArray[i].user_enrol
-            num = i//파일수정을 위한 숫자
-            break;
-        }
-    }
-    for (let i of enrolArray2) {
-        if (i == enrolData) chk = 1
-    }
-    //console.log(chk)
-    if (chk == 0) {
-        response.write('<body><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><script>alert("교과목명이 잘못 입력되었습니다. 다시 입력하십시오.");location.replace("/Enrolment");</script>')
-    }
-    if (chk == 1) {
-        chk = 0
-        for (let i in enrolArray) {
-            if (enrolArray[i] == enrolData) {//교과목 삭제
-                chk = 1;
-                enrolArray.splice(i, 1)
-                objArray[num].user_enrol = enrolArray
+    let sql = "SELECT name FROM Enrol WHERE user_id='" + login_id + "';"
+    conn.query(sql, function (err, rows, fields) {
+        if (err) console.log('query is not executed. select fail...\n' + err);
+        else {
+            enrolArray = JSON.parse(JSON.stringify(rows))//문자열로바꾸고 객체로 파싱.
 
-                for (let j = 0; j < objArray.length - 1; j++) {
-                    if (j == 0) fs.writeFileSync('./enrolment.txt', JSON.stringify(objArray[0]) + "\n")
-                    else fs.appendFileSync("./enrolment.txt", JSON.stringify(objArray[j]) + "\n")
+            let sql2 = "SELECT name FROM Subject"
+            conn.query(sql2, function (err, rows, fields) {
+                if (err) console.log('query is not executed. select fail...\n' + err);
+                else {
+                    enrolArray2 = JSON.parse(JSON.stringify(rows))
+
+                    for (let i in enrolArray2) {//전체 과목에서 입력된 데이터가 있는지 확인
+                        if (enrolArray2[i].name == enrolData) chk = 1
+                    }
+                    if (chk == 0) {
+                        response.write('<body><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><script>alert("교과목명이 잘못 입력되었습니다. 다시 입력하십시오.");location.replace("/Enrolment");</script>')
+                    }
+                    if (chk == 1) {
+                        chk = 0
+                        for (let i in enrolArray) {
+                            if (enrolArray[i].name == enrolData) {//교과목 삭제
+                                chk = 1;
+
+                                let sql3 = "Delete FROM Enrol where user_id='" + login_id + "' AND name='" + enrolData + "';"
+                                conn.query(sql3)
+
+                                response.write('<body><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><script>alert("삭제되었습니다."); location.replace("/Enrolment");</script>')
+                                break;
+                            }
+                        }
+                        if (chk == 0) {//신청안한 교과목
+                            response.write('<body><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><script>alert("수강신청하지 않은 교과목입니다.");location.replace("/Enrolment");</script>')
+                        }
+                    }
                 }
-
-                response.write('<body><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><script>alert("삭제되었습니다."); location.replace("/Enrolment");</script>')
-                break;
-            }
+            })
         }
-        if (chk == 0) {//신청안한 교과목
-            response.write('<body><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><script>alert("수강신청하지 않은 교과목입니다.");location.replace("/Enrolment");</script>')
-        }
-    }
-
+    })
 })
 
 app.listen(52273, () => { console.log('Server Start') });//서버구동 코드
