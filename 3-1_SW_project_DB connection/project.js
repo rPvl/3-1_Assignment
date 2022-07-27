@@ -103,8 +103,14 @@ app.post('/', (request, response) => {//로그인 확인
                         }
                         else {//비번 확인(같은 경우)
                             login_id = arr[0].user_id
-                            let tex = '<body>' + '<script>' + 'location.replace("/Enrolment")' + '</script>' + '</body>'
-                            response.end(tex)
+                            if (login_id=='admin'){
+                                let tex = '<body>' + '<script>' + 'location.replace("/Admin")' + '</script>' + '</body>'
+                                response.end(tex)
+                            }
+                            else{
+                                let tex = '<body>' + '<script>' + 'location.replace("/Enrolment")' + '</script>' + '</body>'
+                                response.end(tex)
+                            }
                         }
                     }
                 }
@@ -322,5 +328,67 @@ app.post('/Enrolment/delet', (request, response) => {//enrolment.txt에 데이�
         }
     })
 })
+
+app.get('/Admin', (request, response) => {
+    let objArray = [] //전체 과목
+    let objArray2 = [] //아이디별로 신청한 과목
+
+    let sql = "SELECT * FROM Subject"
+    conn.query(sql, function (err, rows, fields) {
+        if (err) console.log('query is not executed. select fail...\n' + err);
+        else {
+            objArray = JSON.parse(JSON.stringify(rows))//문자열로바꾸고 객체로 파싱.
+
+            let sql2 = "SELECT E.user_id, S.name, professor, credit FROM Subject S, Enrol E WHERE E.name=S.name order by user_id asc;"
+            conn.query(sql2, function (err, rows, fields) {
+                if (err) console.log('query is not executed. select fail...\n' + err);
+                else {
+                    objArray2 = JSON.parse(JSON.stringify(rows))//문자열로바꾸고 객체로 파싱.
+
+                    let output1 = ""
+                    output1 += "<h4>\<전체 교과목\></h4>"
+                    output1 += '<table> <tr><th>교과목명<th>담당교수<th>학점'
+
+                    for (let i in objArray) {
+                        output1 += "<tr><td>"
+                        output1 += objArray[i].name
+                        output1 += "<td>"
+                        output1 += objArray[i].professor
+                        output1 += "<td>"
+                        output1 += objArray[i].credit
+                        output1 += "</tr>"
+                    }
+                    output1+="</table>"
+
+                    let output2 = "<br>";
+                    output2 += "<h4> \<아이디별 신청한 교과목\> </h4>"
+                    output2 += `<table> <tr><th>아이디<th>교과목명<th>담당교수<th>학점 `
+
+                    for (let i in objArray2) {
+                            output2 += "<tr><td>"
+                            output2 += objArray2[i].user_id
+                            output2 += "<td>"
+                            output2 += objArray2[i].name
+                            output2 += "<td>"
+                            output2 += objArray2[i].professor
+                            output2 += "<td>"
+                            output2 += objArray2[i].credit
+                            output2 += "</tr>"
+                    }
+                    output2 += "</table>"
+
+                    fs.readFile("./Admin.html", (error, data) => {
+                        response.writeHead(200, { 'Content-Type': "text/html" })
+                        response.write(data)//html
+                        response.write(output1)//수강신청한 과목 테이블 보여주기
+                        response.write(output2)//전체 과목 테이블
+                        response.end()
+                    })
+                }
+            })
+        }
+    })
+})
+
 
 app.listen(52273, () => { console.log('Server Start') });//서버구동 코드
