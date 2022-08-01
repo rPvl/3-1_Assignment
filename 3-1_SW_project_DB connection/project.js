@@ -389,7 +389,8 @@ app.get('/Admin', (request, response) => {
         }
     })
 })
-//post 추가
+
+//Subject 테이블에 교과목명만 primary key로 해놔서 중복불가. 교수명도 primary key로 하면 교과목명 중복가능.?
 app.post('/Admin/insert', (request, response) => {//DB에 전송된 데이터 삽입(insert)
     let enrolData = request.body.intext.split(",") //post로 전송 받은 "교과목명,담당교수,학점" 분리
     enrolData[2] = Number(enrolData[2])
@@ -424,53 +425,40 @@ app.post('/Admin/insert', (request, response) => {//DB에 전송된 데이터 �
     }
 })
    
-
-//내용 수정할것
-app.post('/Admin/delet', (request, response) => {//enrolment.txt에 데이터 삭제(delete)
-    let enrolData = request.body.intext; //post로 전송 받은 교과목명
-    let enrolArray = []//등록한 과목명
-    let enrolArray2 = []//전체 과목명
+//sql query 수정하기
+app.post('/Admin/delete', (request, response) => {//DB에 전송된 데이터 삭제(delete)
+    let enrolData = request.body.intext.split(",") //post로 전송 받은 "교과목명,담당교수,학점" 분리
+    enrolData[2] = Number(enrolData[2])
+    let enrolArray = []//전체 과목명
     let chk = 0;
 
-    let sql = "SELECT name FROM Enrol WHERE user_id='" + login_id + "';"
-    conn.query(sql, function (err, rows, fields) {
-        if (err) console.log('query is not executed. select fail...\n' + err);
-        else {
-            enrolArray = JSON.parse(JSON.stringify(rows))//문자열로바꾸고 객체로 파싱.
+    if (!enrolData[0] || !enrolData[1] || isNaN(enrolData[2])) {//숫자만 isNaN 사용
+        response.write('<body><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><script>alert("잘못된 입력입니다. 다시 입력하십시오.");location.replace("/Admin");</script>')
+    }
+    else {
 
-            let sql2 = "SELECT name FROM Subject"
-            conn.query(sql2, function (err, rows, fields) {
-                if (err) console.log('query is not executed. select fail...\n' + err);
-                else {
-                    enrolArray2 = JSON.parse(JSON.stringify(rows))
+        let sql1 = "SELECT name FROM Subject"
+        conn.query(sql1, function (err, rows, fields) {
+            if (err) console.log('query is not executed. select fail...\n' + err);
+            else {
+                enrolArray = JSON.parse(JSON.stringify(rows))//문자열로바꾸고 객체로 파싱.
 
-                    for (let i in enrolArray2) {//전체 과목에서 입력된 데이터가 있는지 확인
-                        if (enrolArray2[i].name == enrolData) chk = 1
-                    }
-                    if (chk == 0) {
-                        response.write('<body><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><script>alert("교과목명이 잘못 입력되었습니다. 다시 입력하십시오.");location.replace("/Enrolment");</script>')
-                    }
-                    if (chk == 1) {
-                        chk = 0
-                        for (let i in enrolArray) {
-                            if (enrolArray[i].name == enrolData) {//교과목 삭제
-                                chk = 1;
-
-                                let sql3 = "Delete FROM Enrol where user_id='" + login_id + "' AND name='" + enrolData + "';"
-                                conn.query(sql3)
-
-                                response.write('<body><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><script>alert("삭제되었습니다."); location.replace("/Enrolment");</script>')
-                                break;
-                            }
-                        }
-                        if (chk == 0) {//신청안한 교과목
-                            response.write('<body><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><script>alert("수강신청하지 않은 교과목입니다.");location.replace("/Enrolment");</script>')
-                        }
-                    }
+                for (let i in enrolArray) {//전체 과목에서 입력된 교과목이 있는지 확인
+                    if (enrolArray[i].name == enrolData[0]) chk = 1
                 }
-            })
-        }
-    })
+                if (chk == 0) {
+                    let sql2="INSERT INTO Subject VALUES('"+enrolData[0]+"','"+enrolData[1]+"','"+enrolData[2]+"')"
+                    conn.query(sql2)
+                    response.write('<body><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><script>alert("교과목이 추가되었습니다.");location.replace("/Admin");</script>')
+                }
+
+                else {
+                    response.write('<body><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><script>alert("이미 등록되어 있는 교과목입니다."); location.replace("/Admin");</script>')
+                }
+            }
+        })
+    }
 })
+
 
 app.listen(52273, () => { console.log('Server Start') });//서버구동 코드
