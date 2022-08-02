@@ -425,7 +425,7 @@ app.post('/Admin/insert', (request, response) => {//DB에 전송된 데이터 �
     }
 })
    
-//sql query 수정하기
+   
 app.post('/Admin/delete', (request, response) => {//DB에 전송된 데이터 삭제(delete)
     let enrolData = request.body.intext.split(",") //post로 전송 받은 "교과목명,담당교수,학점" 분리
     enrolData[2] = Number(enrolData[2])
@@ -446,14 +446,14 @@ app.post('/Admin/delete', (request, response) => {//DB에 전송된 데이터 �
                 for (let i in enrolArray) {//전체 과목에서 입력된 교과목이 있는지 확인
                     if (enrolArray[i].name == enrolData[0]) chk = 1
                 }
-                if (chk == 0) {
-                    let sql2="INSERT INTO Subject VALUES('"+enrolData[0]+"','"+enrolData[1]+"','"+enrolData[2]+"')"
+                if (chk == 1) {
+                    let sql2="DELETE FROM Subject WHERE name='"+enrolData[0]+"' AND professor='"+enrolData[1]+"' AND credit="+enrolData[2]
                     conn.query(sql2)
-                    response.write('<body><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><script>alert("교과목이 추가되었습니다.");location.replace("/Admin");</script>')
+                    response.write('<body><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><script>alert("교과목이 삭제되었습니다.");location.replace("/Admin");</script>')
                 }
 
                 else {
-                    response.write('<body><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><script>alert("이미 등록되어 있는 교과목입니다."); location.replace("/Admin");</script>')
+                    response.write('<body><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><script>alert("등록되지 않은 교과목입니다. 다시 입력하십시오."); location.replace("/Admin");</script>')
                 }
             }
         })
