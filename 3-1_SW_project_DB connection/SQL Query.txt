@@ -19,9 +19,13 @@ name varchar(40)  primary key,
 professor varchar(40),
 credit int
 );
+
 create table Enrol(
 user_id VARCHAR(40),
 name VARCHAR(40),
 FOREIGN KEY (user_id) REFERENCES Student(user_id),
 FOREIGN KEY (name) REFERENCES Subject(name)
 );
+
+-- for admin mode
+insert into Student values('admin','admin');
