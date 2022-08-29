@@ -207,7 +207,8 @@ $(A) prependTo(B)  a를 b 자식 앞에 추가
 
 
 --------------------------------------------------
-과제하면 기말은 공부다 하는거라? 하셧으니가
+과제코드일부
+
 const bodyParser=require('body-parser')
 let arr=[]
 app.post / get안에 arr.push(request.body)
