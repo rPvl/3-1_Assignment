@@ -1,0 +1,224 @@
+<7주차>
+Date 객체
+let date = new Date();
+let h = date.getHours();
+let m = date.getMinits();
+let s = date.getSeconds();
+let t = setInterval(()={Count()},1000)
+setTimeout(clearInterval(t),10000)
+
+function Count(){
+document.write(h+":"+m+":"+s)
+date.setSeconds(s+1)
+h=date.getHours()
+m=date.getMinits()
+s=date.getSeconds()
+}
+
+시간 간격 구하기
+let now = new Date(); let befor = new Date("Jannary 12,2000");
+let interval = now.getTime() - befor.getTime()
+console.log(intervla/1000*60*60*24) //1초*60초*60분*24시간
+
+JSON객체
+let js = [{a:"d"}, {b:100}]
+let copyjs = JSON.stringify(js)
+console.log(typeof copyjs) // 문자열로 변환. 결과 string
+
+let copyobj = JSON.parse(copyjs) //파싱되어서 객체됨
+만약에 파일에서 읽어들이는거면 let copyobj = JSON.parse(copyjs.toString())
+
+
+<9주차>
+fs 모듈 추출
+const fs = require('fs');
+
+파일 읽기
+동기적
+const fs = require('fs');
+const file = fs.readFileSyns("경로")
+console.log(file.toString())
+
+비동기적
+const fs = require('fs');
+fs.readFile('경로',(error,file)=>{console.log(file.toString())})
+
+줄단위 저장
+let fileArray = [ ]
+
+동기적
+const fs = require('fs');
+fileArray = fs.readFileSyns("경로").toString().split("\n")
+for(let i in fileArray){ console.log(fileArray[i])}
+
+비동기적
+const fs = require('fs');
+fs.readFile("경로",(error,file)=>{
+  fileArray = file.toString().split("\n")
+  for(let i in fileArray) console.log(fileArray[i])
+})
+
+파일쓰기
+fs.writeFileSync('파일이름', JSON.stringify(array[0])+"\n")
+이러면 객체 쓰기 가능
+
+write말고 fs.appendSyns 쓰면 붙여쓰기 가능
+
+
+<10주차 express 모듈>
+서버실행하려면 할거
+const bodyParser=require('body-parser')
+const express = require('express')
+const app = express()
+
+app.use(express.static('public'));
+app.use(bodyParser.urlencoded({extended:false}));
+
+app.use((request, response)=>{
+ response.send('<h1>hi</h1>')
+})
+
+app.get('/경로',(request,response)=>{ response.send('a')})
+
+app.get('/',(request,response)=>{  //파일 읽어서 보여주기 
+    fs.readFile("./js/project.html",(error,data)=>{ // 경로
+        response.writeHead(200,{'Content-Type':"text/html"}) //통신방법을 content-type에 보낸다?
+        response.end(data) //end는 종료하면서 보냄.
+    })
+});
+
+app.get("/imgs",(request,response)=>{//이미지 전송.
+    fs.readFile("./js/rue.png",(error,data)=>{ // 경로
+        response.writeHead(200,{'Content-Type':"text/html"})
+        response.write(data)
+        response.end()
+    })
+})
+
+app.post('/경로',(request,response)=>{ 
+  let arr =[]; arr.push(request.body)
+  response.send('a')})
+app.listen(28422,()=>{console.log('Server Start')}) // 서버 구동
+
+send는 2번 실행 못해. 가장 마지막에 실행
+write, end도 있음
+
+
+<11주>
+window.open("./SignUp","","_blank") // 경로, 새창 열기
+window.close();
+location.replace("주소")
+
+<script>
+  function fn(){ document.write("hi")}
+</script>
+<body>
+  <button onclick="fn()">btn</button>
+
+
+<12주>
+1. 문서 객체 모델
+ 넓은 의미 : 웹 브라우저가 HTML 페이지를 인식하는 방법
+ 좁은 의미 : document 객체와 관련된 객체의 집합을 나타냄
+
+2. 웹 페이지 생성 순서
+자바스크립트 코드 실행 -> 바디 실행
+=> 오류날 수 있다.
+
+<script>
+window.onload=function(){
+  document.querySelector('h1').style.backgroundColor = 'red';} 
+</script>
+
+
+3. 문서 객체 선택
+document.getElementById(아이디)
+document.querySelector(선택자) - querySelector는 하나만 선택
+
+[ 여러개 선택 ] - 배열이다.
+- document.getElementsByName(이름)
+- document.getElementsByClassName(클래스)
+- document.querySelectorAll(선택자)
+
+
+<13주 1> 이벤트
+onmouseover
+onmouseout
+onmousemove - 움직였을 때
+onclie
+onblclick - 두번 클릭
+
+onkeypress - 아스키코드값있는 키 눌렸을 대 발생
+onkeydown - 키 눌렸을때
+onkeyup - 눌렀다 떼었을 때
+
+<script>
+window.onload = function(){
+ let btn = document.getElementId("btn1");
+ btn.onclick = function(){ alert("click")}
+}
+
+window.event : window 객체의 event 속성이 이벤트 객체
+
+<body onload="document.f1.user_name.focus()">
+  <form name = "f1" onsubmit="return submit_chk(this)" ~>
+     <input type="text" name="user_name" id="user_name">
+
+
+<13주 2>
+jQuery = 자바스크립트로 만들어진 다양한 함수들의 집합
+
+$(document).ready(function(){ $('h1).css("color","yellow")})
+
+CDN 네트워크 전송방식
+ 네트워크 파일로 jQuery를 가져 오는 것
+이걸 해야 돌아간다.
+
+$(function(){ $('h1).css("color","yellow") }) 도 가능
+
+직접선택자 $('') ''안에 태그나 #아이디 .클래스 집어넣어
+
+간접 선택자 
+$("요소선택").
+parent() / parents() / children()-모든 자식 / preAll()-언늬 모두 / nextAll()-동생 모두
+
+
+text내용 바꾸기
+$('p').text("hi");
+.html()은 html내용 적는거
+<body>
+  <p>testA</p>
+  
+</body>
+
+
+문서 객체 생성
+$(<p></p>).text('hi').attr('id','test1')   attr은 속성을 조작한다.
+
+
+$(A) prependTo(B)  a를 b 자식 앞에 추가
+       appendTo               자식 뒤에 추가
+      insertBefor              앞에 추가
+      insertAfter               뒤에 추가
+
+
+<14주>
+강의 2배로 듣고 자자
+
+
+--------------------------------------------------
+과제하면 기말은 공부다 하는거라? 하셧으니가
+const bodyParser=require('body-parser')
+let arr=[]
+app.post / get안에 arr.push(request.body)
+파이 읽기
+const fs = require('fs')
+let file = []
+file = fs.readFileSync('경로').toString().split('\n')
+
+for i in file{
+ file[i] = JSON.parse(file[i].toString()) // 문자열을 객체로 파싱
+}
+
+파일 쓰기
+file = fs.wrtieFileSync('경로', JSON.stringify(데이터)+"\n");
