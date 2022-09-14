@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript">
+        function aa(){
+
+            document.write(navigator.appCodeName)
+            document.write("<br>")
+            document.write(navigator.appName)
+            document.write("<br>")
+            document.write(navigator.platform)
+            document.write("<br>")
+            document.write(navigator.userAgent)
+            setTimeout(function(){location.reload()},5000)
+        }
+        
+    </script>
+</head>
+<body>
+    <h1 onclick="aa()">웹브라우저 정보</h1>
+</body>
+</html>

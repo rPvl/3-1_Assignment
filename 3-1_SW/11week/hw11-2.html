@@ -1,0 +1,139 @@
+<!-- .js에서 html 파일전송 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>겨울분위기</title>
+
+    <link rel="shortcut icon" href="data:image/png;base64,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">
+
+    <meta property="og:image" content="https://www.sampleposts.com/wp-content/uploads/2020/05/merry-christmas-800x400.jpg">
+    <meta property="og:title" content="가사">
+    <meta property="og:description" content="노래">
+
+    <script src="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/xmas/snow.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
+    <style>
+        *{font-family: 'Poor Story', cursive;}
+        body{
+            background-color: #9b070f;
+        }
+        .envelope{
+
+            width: 200px;
+            height: 200px;
+
+            background-image: url('https://pngimg.com/uploads/envelope/envelope_PNG18366.png');
+            background-size: cover;
+            background-position: center;
+
+            margin: 200px auto 0px auto;
+
+            cursor: pointer;
+        }
+        .envelope-msg{
+            color: white;
+            text-align: center;
+        }
+        .letter-close{
+            display: block;
+        }
+        .letter-open{
+            display: none;
+        }
+        h1{
+            color: white;
+            text-align: center;
+
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        .messagebox{
+            background-color: ivory;
+
+            width: 400px;
+            margin: auto;
+
+            color: brown;
+            padding: 30px;
+
+            font-size: 20px;
+            line-height: 30px;
+
+            box-shadow: 0px 0px 10px 0px white;
+        }
+        .from{
+            text-align: right;
+            margin-bottom: 0px;
+        }
+
+        @media screen and (max-width: 760px) {
+            .messagebox{
+              width: 300px;
+              padding: 20px;  
+            }
+            .rtan {
+                width: 150px;
+                height: 150px;
+                margin: 70px auto 0px auto;
+            }
+            h1{
+                font-size: 28px;
+            }
+            .envelope{
+                margin: 150px auto 0px auto;
+            }
+        }
+
+    </style>
+
+    <script>
+        function open_letter() {
+            document.getElementsByClassName("letter-close")[0].style.display = 'none'
+            document.getElementsByClassName("letter-open")[0].style.display = 'block'
+        }
+    </script>
+
+</head>
+
+<body>
+    <div class="letter-close" onclick="open_letter()">
+        <div class="envelope"></div>
+        <h2 class="envelope-msg">봉투를 열어보시오!</h2> 
+    </div>
+    
+    <div class="letter-open">
+        <h1>숨비 - 열여덟의 겨울</h1>
+        <div class="messagebox">
+            겨울이 온 것 같다<br>
+            이렇게 달이 동그랗게 뜨는데<br>
+            널 향한 내 마음에도 겨울이 왔다<br>
+            너의 커피는 식지 않았는데<br>
+            겨울이 온 것 같다<br>
+            이렇게 달이 동그랗게 뜨는데<br>
+            나의 열여덟의 가을은 어디로 갔나<br>
+            내 손과 발이 차가워지네<br>
+            “아...춥다”<br>
+            겨울이 온 것 같다<br>
+            이렇게 달이 동그랗게 뜨는데<br>
+            널 향한 내 마음에도 겨울이 왔다<br>
+            너의 커피는 식지 않았는데<br>
+            나의 열여덟의 가을은 어디로 갔나<br>
+            내 마음이 차가웠나<br>
+            이 바람이 차가운가<br>
+            널 향한 내 마음에도 겨울이 왔다<br>
+            너의 커피는 식지 않았는데<br>
+            나의 열여덟의 가을은 어디로 갔나<br>
+            내 마음이 차가웠나<br>
+            이 바람이 차가운가<br>
+            널 향한 내 마음에도 겨울이 왔다<br>
+            너의 커피는 식지 않았는데<br>
+            너의 커피는 식지 않았는데<br>
+            <p class="from">2022.01.26 발매</p>
+        </div>
+    </div>
+</body>
+</html>
